@@ -27,7 +27,7 @@ GET
   "id": "123",
   "name": "John"
 }
-\`\`\
+\`\`\`
 
 ## response
 \`\`\`json
@@ -35,7 +35,7 @@ GET
   "id": "456",
   "name": "Jane"
 }
-\`\`\
+\`\`\`
 
 `;
 
@@ -52,9 +52,11 @@ export default function Home() {
       body: JSON.stringify({
         markdown: markdownContent,
       }),
-    }).then(res=>res.json()).then(res=>{
-      setJsonContent(res.jsonSchema)
-    });
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setJsonContent(JSON.stringify(JSON.parse(res.jsonSchema), null, 2));
+      });
   };
   return (
     <>
@@ -72,6 +74,9 @@ export default function Home() {
             extensions={[
               markdown({ base: markdownLanguage, codeLanguages: languages }),
             ]}
+            onChange={(value) => {
+              setMarkdownContent(value);
+            }}
           ></CodeMirror>
           <button onClick={onClick}>Parse</button>
           <CodeMirror
